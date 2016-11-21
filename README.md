@@ -20,6 +20,12 @@ Romulus is written using Python 2.7.
 For it's GUI framework it makes use of PyQt.
 See the requirements.txt file for information on required libraries.
 
+Installation
+------------
+In order to run this app, you will require PyQt4.
+Find PyQt4 in your package manager.
+Once installed, install the requirements using the command 'sudo pip install -r requirements.txt'
+
 Developers
 ----------
 All code is licensed under GNU Public License 2 (GPLv2). This license allows you to copy, edit, and redistribute without restriction, as long as it retains the free GPLv2 license.
