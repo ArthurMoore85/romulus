@@ -28,12 +28,16 @@ class PiDiscovery(object):
     @property
     def rapberry_ip(self):
         r_loc = 0
+        r = None
         try:
             for ip in self.ip_table:
                 if 'Raspberry' in ip:
                     r = str(self.ip_table[r_loc - 2].split()[-1])
                     return r
                 r_loc += 1
+            if not r:
+                r = ''
+            return r
         except AttributeError:
             pass
 

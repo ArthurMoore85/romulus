@@ -11,11 +11,13 @@ from threading import Thread
 from PyQt4 import QtGui
 from PyQt4.QtCore import *
 import time
+from data.initial_declaration import InitialData
+from data.settings import SUPPORTED_PLATFORMS
 from scraping.scraper import Scraper
 from ui.mainWindow import Ui_MainWindow
 from data.database import *
-from data.initial_declaration import InitialData
-from data.settings import *
+# from data.initial_declaration import InitialData
+# from data.settings import *
 from ui.settings_controller import SettingsWindow
 
 
