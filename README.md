@@ -23,8 +23,15 @@ See the requirements.txt file for information on required libraries.
 Installation
 ------------
 In order to run this app, you will require PyQt4.
-Find PyQt4 in your package manager.
-Once installed, install the requirements using the command 'sudo pip install -r requirements.txt'
+Find PyQt4 in your package manager:
+
+_Ubuntu_: `sudo apt-get install pyqt4-dev-tools`
+
+_Fedora 21_: `sudo yum install PyQt4-devel`
+
+_Fedora 22+_: `sudo dnf install PyQt4-devel`
+
+Once installed, install the requirements using the command `sudo pip install -r requirements.txt`
 
 Developers
 ----------
