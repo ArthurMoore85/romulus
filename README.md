@@ -39,4 +39,5 @@ Once installed, install the requirements using the command `pip install -r requi
 Developers
 ----------
 All code is licensed under GNU Public License 2 (GPLv2). This license allows you to copy, edit, and redistribute without restriction, as long as it retains the free GPLv2 license.
-There will also be an API available.
+
+All help is appreciated, whether filing big reports, squashing bugs, requesting features or anything else, simply clone this repo, and if you have improved it somehow, make a pull request.
