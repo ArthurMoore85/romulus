@@ -35,5 +35,5 @@ install:
     # Builds Complete
     - popd
     - pip install -r requirements.txt
- scripts:
+ script:
     - python -m unittest discover tests
