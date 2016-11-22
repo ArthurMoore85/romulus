@@ -1,4 +1,5 @@
 [![Stories in Ready](https://badge.waffle.io/ArthurMoore85/romulus.png?label=ready&title=Ready)](https://waffle.io/ArthurMoore85/romulus)
+[![Build Status](https://travis-ci.org/ArthurMoore85/romulus.svg?branch=master)](https://travis-ci.org/ArthurMoore85/romulus)
 # Romulus
 Linux Retropie manager
 
