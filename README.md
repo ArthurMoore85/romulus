@@ -25,7 +25,7 @@ Installation
 In order to run this app, you will require PyQt4.
 Find PyQt4 in your package manager:
 
-_Ubuntu_: `sudo apt-get install pyqt4-dev-tools`
+_Ubuntu_: `sudo apt-get install python-pip python2.7-dev libxext-dev python-qt4 qt4-dev-tools build-essential`
 
 _Fedora 21_: `sudo yum install PyQt4-devel`
 
