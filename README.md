@@ -1,3 +1,4 @@
+[![Stories in Ready](https://badge.waffle.io/ArthurMoore85/romulus.png?label=ready&title=Ready)](https://waffle.io/ArthurMoore85/romulus)
 # Romulus
 Linux Retropie manager
 
