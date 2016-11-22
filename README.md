@@ -40,4 +40,4 @@ Developers
 ----------
 All code is licensed under GNU Public License 2 (GPLv2). This license allows you to copy, edit, and redistribute without restriction, as long as it retains the free GPLv2 license.
 
-All help is appreciated, whether filing big reports, squashing bugs, requesting features or anything else, simply clone this repo, and if you have improved it somehow, make a pull request.
+All help is appreciated, whether filing bug reports, squashing bugs, requesting features or anything else, simply clone this repo, and if you have improved it somehow, make a pull request.
