@@ -31,6 +31,9 @@ _Fedora 21_: `sudo yum install PyQt4-devel`
 
 _Fedora 22+_: `sudo dnf install PyQt4-devel`
 
+The solution above is the not-so-great installation. You should be using a virtualenv and install everything through there. But alas, I did not. 
+[If you decide to do it the right way, I suggest following these instructions](http://movingthelamppost.com/blog/html/2013/07/12/installing_pyqt____because_it_s_too_good_for_pip_or_easy_install_.html)
+
 Once installed, install the requirements using the command `sudo pip install -r requirements.txt`
 
 Developers
