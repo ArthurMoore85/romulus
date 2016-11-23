@@ -35,8 +35,17 @@ install:
     # Builds Complete
     - popd
     - pip install -r requirements.txt
+    - pip install pyinstaller
     
 script:
     - python -m unittest discover tests
 after_success:
+  - pyinstaller romulus.py
   - bash <(curl -s https://codecov.io/bash)
+deploy:
+  provider: releases
+  api_key: "a11a710e5b5273ee30cc3126a85de2c43d6c6ec9"
+  file: dist/romulus
+	skip_cleanup: true
+  on:
+    tags: true
