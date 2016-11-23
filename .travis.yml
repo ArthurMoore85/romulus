@@ -46,6 +46,6 @@ deploy:
   provider: releases
   api_key: "a11a710e5b5273ee30cc3126a85de2c43d6c6ec9"
   file: dist/romulus
-	skip_cleanup: true
+    skip_cleanup: true
   on:
     tags: true
