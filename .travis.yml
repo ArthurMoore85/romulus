@@ -35,7 +35,7 @@ install:
 script:
 - python -m unittest discover tests
 after_success:
-- pyinstaller --onefile romulus.py
+- pyinstaller romulus.py --onefile
 - bash <(curl -s https://codecov.io/bash)
 deploy:
   provider: releases
