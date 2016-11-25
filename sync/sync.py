@@ -26,3 +26,11 @@ class Sync(object):
         """
         Returns the remote library of games
         """
+        self.ssh = paramiko.SSHClient()
+        self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        self.ssh.connect(
+            self.ip, 
+            username=self.username, 
+            password=self.password
+            )
+
