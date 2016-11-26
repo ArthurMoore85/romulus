@@ -233,7 +233,7 @@ class Ui_MainWindow(object):
         self.menuAbout.setTitle(_translate("MainWindow", "About", None))
         self.actionSettings.setText(_translate("MainWindow", "Settings", None))
         self.actionQuit.setText(_translate("MainWindow", "Quit", None))
-        self.actionSync_Library.setText(_translate("MainWindow", "Sync Library", None))
+        self.actionSync_Library.setText(_translate("MainWindow", "Pi Control Center", None))
         self.actionHelp.setText(_translate("MainWindow", "Help", None))
         self.actionAbout_Romulus.setText(_translate("MainWindow", "About Romulus", None))
 

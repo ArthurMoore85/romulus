@@ -13,11 +13,11 @@ from PyQt4.QtCore import *
 import time
 from data.initial_declaration import InitialData
 from data.settings import SUPPORTED_PLATFORMS
+from sync.remote import Sync, GAMES_CLEAN
+from ui.pi_controller import PiWindow
 from scraping.scraper import Scraper
 from ui.mainWindow import Ui_MainWindow
 from data.database import *
-# from data.initial_declaration import InitialData
-# from data.settings import *
 from ui.settings_controller import SettingsWindow
 
 
@@ -28,20 +28,23 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         """
         Main window controller
         """
+        QtGui.QWidget.__init__(self, parent)
+        self.setupUi(self)
         self.session = session()
         if self.session.query(Settings).count() <= 0:
             InitialData()
         self.search = None
         self.settings_obj = self.session.query(Settings).first()
         self.product_obj = self.session.query(Product).first()
-        QtGui.QWidget.__init__(self, parent)
-        self.setupUi(self)
         self._set_defaults()
         self.live_url = None
         self.settings_window = None
         self.sync_window = None
         self.results = None
         self.rasp_ip = self.session.query(RetropieSettings).first().last_known_ip
+        self.retro_settings = self.session.query(RetropieSettings).first()
+        self.sync_obj = None
+        self.games_dict = GAMES_CLEAN
 
         # Triggers
         self.actionQuit.triggered.connect(self._quit_romulus)
@@ -50,6 +53,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.search_signal.connect(self.set_status)
         self.tableSearchResults.cellClicked.connect(self.selected_rom)
         self.btnDownloadSelected.clicked.connect(self.download_rom)
+        self.actionSync_Library.triggered.connect(self._sync)
 
     def download_rom(self):
         """
@@ -126,6 +130,16 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         if self.settings_window is None:
             self.settings_window = SettingsWindow(self.rasp_ip)
         self.settings_window.show()
+
+    def _sync(self):
+        """
+        Initialize Pi Control Centre window
+        """
+        if self.sync_window is None:
+            if self.sync_obj is None:
+                self.sync_obj = Sync(self.retro_settings)
+            self.sync_window = PiWindow(self.sync_obj, self.games_dict)
+        self.sync_window.show()
 
     def _set_defaults(self):
         """
