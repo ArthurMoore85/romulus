@@ -15,7 +15,7 @@ Features:
 * Automatic Pi detection
 * Searching ROMs through Emuparadise
 * Pi Status (Online/Offline)
-* ROM downloading (not yet implemented)
+* ROM downloading
 * Syncing ROMs with Pi (not yet implemented)
 
 Details
