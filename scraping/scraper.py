@@ -8,11 +8,13 @@
 from __future__ import unicode_literals
 import os
 import textwrap
+import urllib
 import urllib2
 import mechanize
 from data.database import session, Settings
 import imp
 from bs4 import BeautifulSoup
+from emuparadise import EmuParadise
 
 __author__ = 'arthur'
 
@@ -102,8 +104,16 @@ class Scraper(object):
         response = urllib2.urlopen(r)
         soup = BeautifulSoup(response, 'html.parser')
         matches = soup.findAll('div', {'class': desc_text})
-        final_txt = self.reformat_description(matches[0].text)
+        final_txt = self.reformat_description(matches[0].text)[8:]
         return final_txt
+
+    def download_link(self, url):
+        """
+        Retrieves download url
+        """
+        emu = EmuParadise()
+        link = emu.get_link(url)
+        return link
 
     def reformat_description(self, description):
         """
@@ -137,19 +147,18 @@ class Scraper(object):
             matches = matches[0]['href']
         return '{0}{1}'.format(self.url, matches)
 
-    def download(self, url):
+    def download(self, url, location):
         """
         In many cases such as Emuparadise, hotlinking is blocked.
         For that reason, we must follow the redirects with mechanize.
         After which we will download the file required.
         """
-        self.browser.addheaders = [('User-agent', 'Firefox')]
-        r = self.browser.open(url)
-        for link in self.browser.links():
-            attrs = link.attrs
-            try:
-                if attrs[1][0] == 'itemprop' and attrs[1][1] == 'downloadURL':
-                    self.browser.follow_link(url=link.url)
-            except IndexError:
-                pass
-        # self.browser.retrieve(dl_page, '/home/arthur/test.zip')
+        link = self.download_link(url)
+        file_name = urllib2.unquote(link.split('/')[-1])
+        target_file_name = os.path.join(location, file_name)
+        urllib.urlretrieve(link, target_file_name)
+        f = urllib2.urlopen(link)
+        data = f.read()
+        with open(target_file_name, 'wb') as code:
+            code.write(data)
+

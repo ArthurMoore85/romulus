@@ -13,6 +13,7 @@ from PyQt4.QtCore import *
 import time
 from data.initial_declaration import InitialData
 from data.settings import SUPPORTED_PLATFORMS
+from io_utils.directory_utils import Directories
 from sync.remote import Sync, GAMES_CLEAN
 from ui.pi_controller import PiWindow
 from scraping.scraper import Scraper
@@ -38,6 +39,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.product_obj = self.session.query(Product).first()
         self._set_defaults()
         self.live_url = None
+        self.dirs_obj = Directories()
         self.settings_window = None
         self.sync_window = None
         self.results = None
@@ -60,7 +62,9 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         Downloads selected ROM
         """
         url = self.live_url
-        self.search.download(url)
+        platform = " ".join(url.split('/')[-3].replace('_', ' ').split()[:-1])
+        target = self.dirs_obj.target_directory(self.settings_obj.download_location, platform)
+        self.search.download(url, target)
 
     def selected_rom(self):
         """

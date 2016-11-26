@@ -7,7 +7,7 @@ from piWindow import Ui_PiWindow
 class PiWindow(QtGui.QMainWindow, Ui_PiWindow):
     def __init__(self, sync_obj, games_dict, parent=None):
         """
-        Some comment here
+        Controller for the Pi Control Center window
         """
         QtGui.QWidget.__init__(self, parent)
         self.setupUi(self)
