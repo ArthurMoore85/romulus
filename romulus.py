@@ -24,6 +24,7 @@ from ui.settings_controller import SettingsWindow
 
 class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
     search_signal = pyqtSignal(str)
+    status_signal = pyqtSignal(str)
 
     def __init__(self, parent=None):
         """
@@ -53,9 +54,18 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.actionSettings.triggered.connect(self._settings)
         self.btnSearch.clicked.connect(self.search_thread)
         self.search_signal.connect(self.set_status)
+        self.status_signal.connect(self.set_status)
         self.tableSearchResults.cellClicked.connect(self.selected_rom)
-        self.btnDownloadSelected.clicked.connect(self.download_rom)
-        self.actionSync_Library.triggered.connect(self._sync)
+        self.btnDownloadSelected.clicked.connect(self._download_thread)
+        self.actionSync_Library.triggered.connect(self._pi_window)
+
+    def _download_thread(self):
+        """
+        Starts a thread for the download
+        """
+        th = Thread(target=self.download_rom)
+        th.setDaemon(True)
+        th.start()
 
     def download_rom(self):
         """
@@ -99,7 +109,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         Searches for the entered ROM
         """
         rom = str(self.editSearchTitle.text())
-        self.search = Scraper(rom)
+        self.search = Scraper(rom, parent=self)
         result = self.search.fill_in_form()
         self.set_results(result)
         self.search_signal.emit('Completed')
@@ -135,14 +145,23 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self.settings_window = SettingsWindow(self.rasp_ip)
         self.settings_window.show()
 
+    def _pi_window(self):
+        """
+        Starts Pi Controller in separate thread
+        """
+        self.set_status('Connecting to Retropie')
+        self._sync()
+
     def _sync(self):
         """
         Initialize Pi Control Centre window
         """
+        self.status_signal.emit('Connecting to Retropie')
         if self.sync_window is None:
             if self.sync_obj is None:
                 self.sync_obj = Sync(self.retro_settings)
-            self.sync_window = PiWindow(self.sync_obj, self.games_dict)
+            self.sync_window = PiWindow(self.sync_obj, self.settings_obj, self.games_dict)
+        self.status_signal.emit('Idle')
         self.sync_window.show()
 
     def _set_defaults(self):
@@ -150,16 +169,13 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         Set default visuals
         """
         search_headers = ['Title']
-        download_headers = ['Title', 'Status']
         self.tableSearchResults.setColumnCount(1)
-        self.tableDownloadProgress.setColumnCount(2)
         self.tableSearchResults.setHorizontalHeaderLabels(search_headers)
-        self.tableDownloadProgress.setHorizontalHeaderLabels(download_headers)
+        self.tableLocalCollection.setHorizontalHeaderLabels(search_headers)
         search_header = self.tableSearchResults.horizontalHeader()
-        download_header = self.tableDownloadProgress.horizontalHeader()
+        local_header = self.tableLocalCollection.horizontalHeader()
         search_header.setStretchLastSection(True)
-        download_header.setStretchLastSection(True)
-        self.comboPlatformSearch.addItems(SUPPORTED_PLATFORMS)
+        local_header.setStretchLastSection(True)
         self.btnDownloadSelected.setEnabled(False)
 
 

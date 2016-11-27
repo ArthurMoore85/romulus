@@ -1,6 +1,7 @@
 """
 Sync module
 """
+import os
 import paramiko
 from paramiko.ssh_exception import NoValidConnectionsError, AuthenticationException
 
@@ -48,6 +49,8 @@ class Sync(object):
         self.username = pi_settings.username
         self.password = pi_settings.password
         self.status = False
+        self.sftp = None
+        self.sftp_open = False
 
         self.ssh = paramiko.SSHClient()
         self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -80,3 +83,35 @@ class Sync(object):
                 directory = directory.rstrip()
                 library[GAMES_CLEAN[directory]] = files
         return library
+
+    def transfer(self, local_dir):
+        """
+        Transfers local roms to Retropie
+        """
+        base_pi_dir = '/home/pi/RetroPie/roms'
+        all_games = {}
+        transport = paramiko.Transport((self.ip, 22))
+        transport.connect(username=self.username, password=self.password)
+        if not self.sftp_open:
+            self.sftp = paramiko.SFTPClient.from_transport(transport)
+            self.sftp_open = True
+
+        dirs = [dirs for root, dirs, files in os.walk(local_dir)][0]
+        for rom in dirs:
+            all_games[rom] = [games for root, dirs, games in os.walk(os.path.join(local_dir, rom))][0]
+
+        for k, v in all_games.iteritems():
+            for rom in v:
+                tmp_remote = '{0}/{1}/{2}'.format(base_pi_dir, k, rom)
+                tmp_local = os.path.join(local_dir, k, rom)
+                self.sftp.put(tmp_local, tmp_remote)
+        self.close_connection()
+        transport.close()
+
+    def close_connection(self):
+        """
+        Closes transfer
+        """
+        if self.sftp_open:
+            self.sftp.close()
+            self.sftp_open = False

@@ -11,6 +11,9 @@ import textwrap
 import urllib
 import urllib2
 import mechanize
+import time
+import requests
+from requests.packages.urllib3 import response
 from data.database import session, Settings
 import imp
 from bs4 import BeautifulSoup
@@ -20,11 +23,12 @@ __author__ = 'arthur'
 
 
 class Scraper(object):
-    def __init__(self, rom):
+    def __init__(self, rom, parent=None):
         """
         Scrapes a website
         :param search_query: User search query
         """
+        self.parent = parent
         self.session = session()
         self.url = None
         self.search_q = rom
@@ -156,9 +160,10 @@ class Scraper(object):
         link = self.download_link(url)
         file_name = urllib2.unquote(link.split('/')[-1])
         target_file_name = os.path.join(location, file_name)
+        self.parent.status_signal.emit('Downloading {0}'.format(file_name))
         urllib.urlretrieve(link, target_file_name)
         f = urllib2.urlopen(link)
         data = f.read()
         with open(target_file_name, 'wb') as code:
             code.write(data)
-
+        self.parent.status_signal.emit('Idle')
