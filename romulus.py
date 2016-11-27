@@ -7,12 +7,13 @@ Date: 2016-11-19
 License: GPLv2
 """
 from __future__ import unicode_literals
+import os
 from threading import Thread
 from PyQt4 import QtGui
 from PyQt4.QtCore import *
 import time
+from PyQt4.QtGui import QHeaderView
 from data.initial_declaration import InitialData
-from data.settings import SUPPORTED_PLATFORMS
 from io_utils.directory_utils import Directories
 from sync.remote import Sync, GAMES_CLEAN
 from ui.pi_controller import PiWindow
@@ -47,6 +48,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.rasp_ip = self.session.query(RetropieSettings).first().last_known_ip
         self.retro_settings = self.session.query(RetropieSettings).first()
         self.sync_obj = None
+        self.local_library = None
         self.games_dict = GAMES_CLEAN
 
         # Triggers
@@ -58,6 +60,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.tableSearchResults.cellClicked.connect(self.selected_rom)
         self.btnDownloadSelected.clicked.connect(self._download_thread)
         self.actionSync_Library.triggered.connect(self._pi_window)
+        self.comboLocalFilter.activated.connect(self.filter_local_library)
 
     def _download_thread(self):
         """
@@ -87,6 +90,19 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         description = self.search.get_description(result)
         self.lblSearchDescriptionSelected.setText(description)
         self.btnDownloadSelected.setEnabled(True)
+
+    def fetch_local_collection(self):
+        """
+        Returns local games collection as a dictionary
+        """
+        games_loc = self.settings_obj.download_location
+        library = {}
+        if not os.path.exists(games_loc):
+            os.makedirs(games_loc)
+        dirs = [dirs for root, dirs, files in os.walk(games_loc)][0]
+        for rom in dirs:
+            library[GAMES_CLEAN[rom]] = [games for root, dirs, games in os.walk(os.path.join(games_loc, rom))][0]
+        return library
 
     def set_status(self, text):
         """
@@ -169,15 +185,63 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         Set default visuals
         """
         search_headers = ['Title']
+
         self.tableSearchResults.setColumnCount(1)
         self.tableSearchResults.setHorizontalHeaderLabels(search_headers)
-        self.tableLocalCollection.setHorizontalHeaderLabels(search_headers)
         search_header = self.tableSearchResults.horizontalHeader()
-        local_header = self.tableLocalCollection.horizontalHeader()
         search_header.setStretchLastSection(True)
-        local_header.setStretchLastSection(True)
         self.btnDownloadSelected.setEnabled(False)
+        self._set_default_local()
 
+    def _set_default_local(self):
+        local_headers = ['Title', 'Platform']
+        library = self.fetch_local_collection()
+        total_rows = 0
+        for platform, roms in library.iteritems():
+            total_rows += len(roms)
+        self.tableLocalCollection.clear()
+        local_header = self.tableLocalCollection.horizontalHeader()
+        self.tableLocalCollection.setColumnCount(2)
+        self.tableLocalCollection.setRowCount(total_rows)
+        local_header.setStretchLastSection(True)
+        local_header.setResizeMode(0, QHeaderView.Stretch)
+        self.tableLocalCollection.setHorizontalHeaderLabels(local_headers)
+        row = 0
+        local_platforms = []
+        for platform, roms in library.iteritems():
+            local_platforms.append(platform)
+            for rom in roms:
+                self.tableLocalCollection.setItem(row, 0, QtGui.QTableWidgetItem(rom))
+                self.tableLocalCollection.setItem(row, 1, QtGui.QTableWidgetItem(platform))
+                row += 1
+        self.comboLocalFilter.clear()
+        self.comboLocalFilter.addItem('All')
+        self.comboLocalFilter.addItems(local_platforms)
+
+    def filter_local_library(self):
+        """
+        Sets a filtered list of local ROMS
+        """
+        selected = str(self.comboLocalFilter.currentText())
+        if selected != 'All':
+            local_headers = ['Title', 'Platform']
+            library = self.fetch_local_collection()
+            filtered_roms = library[selected]
+            total_rows = len(filtered_roms)
+            local_header = self.tableLocalCollection.horizontalHeader()
+            self.tableLocalCollection.clear()
+            self.tableLocalCollection.setColumnCount(2)
+            self.tableLocalCollection.setRowCount(total_rows)
+            local_header.setStretchLastSection(True)
+            local_header.setResizeMode(0, QHeaderView.Stretch)
+            self.tableLocalCollection.setHorizontalHeaderLabels(local_headers)
+            row = 0
+            for rom in filtered_roms:
+                self.tableLocalCollection.setItem(row, 0, QtGui.QTableWidgetItem(rom))
+                self.tableLocalCollection.setItem(row, 1, QtGui.QTableWidgetItem(selected))
+                row += 1
+        else:
+            self._set_default_local()
 
 if __name__ == '__main__':
     import sys

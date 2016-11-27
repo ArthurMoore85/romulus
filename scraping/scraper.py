@@ -11,9 +11,6 @@ import textwrap
 import urllib
 import urllib2
 import mechanize
-import time
-import requests
-from requests.packages.urllib3 import response
 from data.database import session, Settings
 import imp
 from bs4 import BeautifulSoup
