@@ -17,6 +17,8 @@ Features:
 * Pi Status (Online/Offline)
 * ROM downloading
 * Syncing ROMs with Pi (sending local ROMs to Pi)
+* View local games library
+* View Retropie's remote library
 
 Details
 -------
