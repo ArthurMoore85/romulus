@@ -15,6 +15,7 @@ from data.database import session, Settings
 import imp
 from bs4 import BeautifulSoup
 from emuparadise import EmuParadise
+from io_utils.compression import Compression
 
 __author__ = 'arthur'
 
@@ -163,4 +164,6 @@ class Scraper(object):
         data = f.read()
         with open(target_file_name, 'wb') as code:
             code.write(data)
+        ex = Compression(location)
+        ex.extract(target_file_name)
         self.parent.status_signal.emit('Idle')

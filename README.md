@@ -29,11 +29,11 @@ Installation
 In order to run this app, you will require PyQt4.
 Find PyQt4 in your package manager:
 
-_Ubuntu_: `sudo apt-get install python-pip python2.7-dev libxext-dev python-qt4 qt4-dev-tools build-essential`
+_Ubuntu_: `sudo apt-get install python-pip python2.7-dev libxext-dev python-qt4 qt4-dev-tools build-essential libarchive-dev`
 
-_Fedora 21_: `sudo yum install PyQt4-devel`
+_Fedora 21_: `sudo yum install PyQt4-devel libarchive-devel`
 
-_Fedora 22+_: `sudo dnf install PyQt4-devel`
+_Fedora 22+_: `sudo dnf install PyQt4-devel libarchive-devel`
 
 The solution above is the not-so-great installation. You should be using a virtualenv and install everything through there. But alas, I did not. 
 [If you decide to do it the right way, I suggest following these instructions](http://movingthelamppost.com/blog/html/2013/07/12/installing_pyqt____because_it_s_too_good_for_pip_or_easy_install_.html)
