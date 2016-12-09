@@ -16,7 +16,9 @@ Features:
 * Searching ROMs through Emuparadise
 * Pi Status (Online/Offline)
 * ROM downloading
-* Syncing ROMs with Pi (not yet implemented)
+* Syncing ROMs with Pi (sending local ROMs to Pi)
+* View local games library
+* View Retropie's remote library
 
 Details
 -------
