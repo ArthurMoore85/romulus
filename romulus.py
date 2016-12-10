@@ -176,7 +176,8 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         if self.sync_window is None:
             if self.sync_obj is None:
                 self.sync_obj = Sync(self.retro_settings)
-            self.sync_window = PiWindow(self.sync_obj, self.settings_obj, self.games_dict)
+            self.sync_window = PiWindow(self.sync_obj, self.settings_obj,
+                                        self.games_dict, self.fetch_local_collection())
         self.status_signal.emit('Idle')
         self.sync_window.show()
 

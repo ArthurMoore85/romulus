@@ -84,22 +84,17 @@ class Sync(object):
                 library[GAMES_CLEAN[directory]] = files
         return library
 
-    def transfer(self, local_dir):
+    def transfer(self, local_dir, games_dict):
         """
         Transfers local roms to Retropie
         """
         base_pi_dir = '/home/pi/RetroPie/roms'
-        all_games = {}
+        all_games = games_dict
         transport = paramiko.Transport((self.ip, 22))
         transport.connect(username=self.username, password=self.password)
         if not self.sftp_open:
             self.sftp = paramiko.SFTPClient.from_transport(transport)
             self.sftp_open = True
-
-        dirs = [dirs for root, dirs, files in os.walk(local_dir)][0]
-        for rom in dirs:
-            all_games[rom] = [games for root, dirs, games in os.walk(os.path.join(local_dir, rom))][0]
-
         for k, v in all_games.iteritems():
             for rom in v:
                 tmp_remote = '{0}/{1}/{2}'.format(base_pi_dir, k, rom)
