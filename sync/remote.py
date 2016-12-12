@@ -96,9 +96,10 @@ class Sync(object):
             self.sftp = paramiko.SFTPClient.from_transport(transport)
             self.sftp_open = True
         for k, v in all_games.iteritems():
+            sys_dir = GAMES_CLEAN.keys()[GAMES_CLEAN.values().index(k)]
             for rom in v:
-                tmp_remote = '{0}/{1}/{2}'.format(base_pi_dir, k, rom)
-                tmp_local = os.path.join(local_dir, k, rom)
+                tmp_remote = '{0}/{1}/{2}'.format(base_pi_dir, sys_dir, rom)
+                tmp_local = os.path.join(local_dir, sys_dir, rom)
                 self.sftp.put(tmp_local, tmp_remote)
         self.close_connection()
         transport.close()
