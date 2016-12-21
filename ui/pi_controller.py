@@ -55,7 +55,12 @@ class PiWindow(QtGui.QMainWindow, Ui_PiWindow):
             for game in roms:
                 found = 0
                 clean_game = self.clean_game_name(game)
-                r_system = self.games[system]
+                try:
+                    r_system = self.games[system]
+                except KeyError:
+                    # System does not exist remotely
+                    self.games[system] = []
+                    r_system = self.games[system]
                 for r_game in r_system:
                     clean_r_game = self.clean_game_name(r_game)
                     if clean_r_game == clean_game:

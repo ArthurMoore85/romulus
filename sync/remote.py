@@ -36,7 +36,9 @@ GAMES_CLEAN = {
     'sg-1000': 'SG 1000',
     'snes': 'Super Nintendo (SNES)',
     'vectrex': 'Vectrex',
-    'zxspectrum': 'ZX Spectrum'
+    'zxspectrum': 'ZX Spectrum',
+    'pc': 'PC/DOS',
+    'ports': 'Ports',
 }
 
 
