@@ -12,6 +12,14 @@ from pyunpack import Archive
 
 __author__ = 'arthur'
 
+RUNS_COMPRESSED = [
+    'mame-libretro',
+    'neogeo',
+    'atari2600',
+    'pcengine',
+    'snes',
+]
+
 
 class Compression(object):
     def __init__(self, target):
@@ -59,10 +67,12 @@ class Compression(object):
         Extracts all files
         """
         f, t = self.determine_type(file_o)
-        if t == 'zip':
-            self.unzip(f)
-        elif t == '7z':
-            self.unzip_seven(f)
-        elif t == 'rar':
-            self.unrar(f)
-        self.clean_up(file_o)
+        parent_dir = f.split(os.sep)[-2]
+        if parent_dir not in RUNS_COMPRESSED:
+            if t == 'zip':
+                self.unzip(f)
+            elif t == '7z':
+                self.unzip_seven(f)
+            elif t == 'rar':
+                self.unrar(f)
+            self.clean_up(file_o)
