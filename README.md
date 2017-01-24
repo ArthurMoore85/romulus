@@ -3,6 +3,8 @@
 [![Code Health](https://landscape.io/github/ArthurMoore85/romulus/master/landscape.svg?style=flat)](https://landscape.io/github/ArthurMoore85/romulus/master)
 
 # Romulus
+Please note, this app is intended for Linux desktop/laptop systems, and not for running on the Raspberry Pi.
+If you want the same functionality but for on the Raspberry Pi, click [here](https://github.com/ArthurMoore85/pi_romulus)
 Linux Retropie manager
 
 Managing your Retropie shouldn't be difficult, that's why there's Romulus.
