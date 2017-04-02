@@ -26,6 +26,7 @@ class Settings(Base):
     download_location = Column(String)
     local_ip = Column(String)
     selected_service = Column(String)
+    theme = Column(String)
 
 
 class RetropieSettings(Base):

@@ -9,6 +9,7 @@ License: GPLv2
 from __future__ import unicode_literals
 import os
 from threading import Thread
+
 from PyQt4 import QtGui
 from PyQt4.QtCore import *
 import time
@@ -248,6 +249,14 @@ if __name__ == '__main__':
     import sys
 
     app = QtGui.QApplication(sys.argv)
+
+    # Check theme
+    sess = session()
+    if sess.query(Settings).count() != 0:
+        settings_obj = sess.query(Settings).first()
+        if settings_obj.theme == 'dark':
+            import qdarkstyle as qdarkstyle
+            app.setStyleSheet(qdarkstyle.load_stylesheet(pyside=False))
     window = MainWindow()
     window.show()
     sys.exit(app.exec_())
