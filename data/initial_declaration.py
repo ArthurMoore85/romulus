@@ -64,7 +64,8 @@ class InitialData(object):
         setting = Settings(
             download_location=self.download_loc,
             selected_service=self.default_service,
-            local_ip=get_local_ip()
+            local_ip=get_local_ip(),
+            theme='light'
         )
         settings.add(setting)
         settings.add(product_settings())
