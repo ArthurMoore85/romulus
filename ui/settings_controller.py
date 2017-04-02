@@ -20,6 +20,7 @@ class SettingsWindow(QtGui.QMainWindow, Ui_settingsWindow):
         self.setupUi(self)
         self.db_settings = self.session.query(Settings).first()
         self.db_pi_settings = self.session.query(RetropieSettings).first()
+        self.comboTheme.addItems(['Light', 'Dark'])
         self._default_settings()
         self.passworded = True
 
@@ -28,6 +29,7 @@ class SettingsWindow(QtGui.QMainWindow, Ui_settingsWindow):
         self.btnCancel.clicked.connect(self._close_window)
         self.btnDownloadLocBrowse.clicked.connect(self._download_location_picker)
         self.btnSave.clicked.connect(self._save_settings)
+        self.comboTheme.currentIndexChanged.connect(self._set_theme)
 
     def _scan_ip(self):
         """
@@ -51,6 +53,18 @@ class SettingsWindow(QtGui.QMainWindow, Ui_settingsWindow):
         self.db_pi_settings.password = pi_password
         self.session.commit()
         self._close_window()
+
+    def _set_theme(self):
+        """
+        Sets the app theme.
+        """
+        selected = str(self.comboTheme.currentText()).lower()
+        last_theme = self.db_settings.theme.lower()
+        if selected != last_theme:
+            self.db_settings.theme = selected
+            self.session.commit()
+            QtGui.QMessageBox.information(self, 'Please restart',
+                                          'You will need to restart Romulus for changes to take effect.')
 
     def _download_location_picker(self):
         """
@@ -78,6 +92,9 @@ class SettingsWindow(QtGui.QMainWindow, Ui_settingsWindow):
         self.online = is_online_string(self.rasp_ip)
         self.lblPiStatus.setText('<h2>{0}</h2>'.format(self.online))
         self.comboRomSource.addItems(self.available_services())
+        theme_index = self.comboTheme.findText(self.db_settings.theme.capitalize(), QtCore.Qt.MatchFixedString)
+        if theme_index and theme_index >= 0:
+            self.comboTheme.setCurrentIndex(theme_index)
 
     def _view_password(self):
         """
