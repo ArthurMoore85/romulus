@@ -6,6 +6,8 @@
 **Please note, this app is intended for Linux desktop/laptop systems, and not for running on the Raspberry Pi.
 If you want the same functionality but for on the Raspberry Pi, click [here](https://github.com/ArthurMoore85/pi_romulus)**
 
+**THIS REPOSITORY IS NO LONGER BEING MAINTAINED OUTSIDE OF SECURITY FIXES**
+
 Linux Retropie manager
 
 Managing your Retropie shouldn't be difficult, that's why there's Romulus.
